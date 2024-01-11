@@ -5,7 +5,8 @@ import {Card} from "react-native-paper";
 
 const Labels = [
     "실내 온도 센서",
-    "실내 습도 센서"
+    "실내 습도 센서",
+    "실내 Co2 센서"
 ]
 
 interface SensorModuleWidgetProps {

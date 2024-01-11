@@ -4,7 +4,6 @@ import { createMaterialBottomTabNavigator } from "react-native-paper/react-navig
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Main from "../screens/Main";
 import Account from "../screens/Account";
-import Device from "../screens/Device";
 import Control from "../screens/Control";
 import Monitor from "../screens/Monitor";
 
