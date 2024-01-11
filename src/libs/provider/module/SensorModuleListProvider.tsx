@@ -10,6 +10,7 @@ import {DEBUG} from '@env';
 import { useIotCore } from '../../amplify/IotCoreProvider';
 import { useAuthenticator } from '@aws-amplify/ui-react-native';
 import { DataFetcher } from '../../util';
+import {Text} from "react-native";
 
 const SensorModuleListStateContext = createContext<SensorModuleListState | null>(null);
 const SensorModuleListDispatchContext = createContext<SensorModuleListDispatch | null>(null);
@@ -61,8 +62,12 @@ function reducer(state: SensorModuleListState, action: SensorModuleListAction): 
     }
 }
 
+interface ChildrenProps extends SensorModuleListState {
+    sensors: Array<SensorModulePreview>;
+}
+
 interface SensorModuleListDataProviderProps {
-    children?: React.ReactNode | undefined;
+    children: (props: ChildrenProps) => React.ReactNode;
 }
 
 function SensorModuleListProvider({children}: SensorModuleListDataProviderProps) {
@@ -81,6 +86,7 @@ function SensorModuleListProvider({children}: SensorModuleListDataProviderProps)
         revalidate: mutate,
         data: response?.sensors,
     });
+    const {data} = state;
     const sensorUpdateHandler = useCallback((sensorModules: any) => {
         for (const sensorModule of sensorModules) {
             dispatch({
@@ -117,10 +123,18 @@ function SensorModuleListProvider({children}: SensorModuleListDataProviderProps)
             sensorUpdateSubscription.unsubscribe();
         };
     }, [user, client, sensorUpdateHandler]);
+    if (!data) {
+        return (
+            <Text>로딩중...</Text>
+        );
+    }
     return (
         <SensorModuleListStateContext.Provider value={state}>
             <SensorModuleListDispatchContext.Provider value={dispatch}>
-                {children}
+                {children({
+                    ...state,
+                    sensors: data,
+                })}
             </SensorModuleListDispatchContext.Provider>
         </SensorModuleListStateContext.Provider>
     );

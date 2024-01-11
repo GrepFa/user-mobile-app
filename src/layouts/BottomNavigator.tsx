@@ -2,9 +2,11 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Main from "../../screens/Main";
-import Account from "../../screens/Account";
-import Device from "../../screens/Device";
+import Main from "../screens/Main";
+import Account from "../screens/Account";
+import Device from "../screens/Device";
+import Control from "../screens/Control";
+import Monitor from "../screens/Monitor";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -23,10 +25,16 @@ const TabItems: Array<TabItem> = [
     icon: "home"
   },
   {
-    name: 'device-develop',
-    label: "개발자",
-    component: Device,
+    name: 'motor-control',
+    label: "제어",
+    component: Control,
     icon: "tools"
+  },
+  {
+    name: 'sensor-monitor',
+    label: "모니터링",
+    component: Monitor,
+    icon: "monitor"
   },
   {
     name: 'account',

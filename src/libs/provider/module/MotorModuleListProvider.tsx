@@ -14,6 +14,7 @@ import { useIotCore } from '../../amplify/IotCoreProvider';
 import { useAuthenticator } from '@aws-amplify/ui-react-native';
 import {DEBUG} from '@env';
 import moment from 'moment';
+import {Text} from "react-native";
 
 const MotorModuleListStateContext = createContext<MotorModuleListState | null>(null);
 const MotorModuleListDispatchContext = createContext<MotorModuleListDispatch | null>(null);
@@ -88,8 +89,12 @@ function reducer(state: MotorModuleListState, action: MotorModuleListAction): Mo
     }
 }
 
+interface ChildrenProps extends MotorModuleListState {
+    motors: Array<MotorModulePreview>;
+}
+
 interface MotorModuleListDataProviderProps {
-    children?: React.ReactNode | undefined;
+    children: (props: ChildrenProps) => React.ReactNode;
 }
 
 function MotorModuleListProvider({children}: MotorModuleListDataProviderProps) {
@@ -108,6 +113,7 @@ function MotorModuleListProvider({children}: MotorModuleListDataProviderProps) {
         revalidate: mutate,
         data: response?.motors,
     });
+    const {data} = state;
     const motorUpdateHandler = useCallback((motorModules: any) => {
         for (const motorModule of motorModules) {
             dispatch({
@@ -144,10 +150,18 @@ function MotorModuleListProvider({children}: MotorModuleListDataProviderProps) {
             motorUpdateSubscription.unsubscribe();
         };
     }, [user, client, motorUpdateHandler]);
+    if (!data) {
+        return (
+            <Text>로딩중...</Text>
+        );
+    }
     return (
         <MotorModuleListStateContext.Provider value={state}>
             <MotorModuleListDispatchContext.Provider value={dispatch}>
-                {children}
+                {children({
+                    ...state,
+                    motors: data,
+                })}
             </MotorModuleListDispatchContext.Provider>
         </MotorModuleListStateContext.Provider>
     );

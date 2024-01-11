@@ -31,7 +31,6 @@ interface RelayModuleWidgetProps {
 function MotorModuleWidget({ data }: RelayModuleWidgetProps) {
   const {
     thingName, port,
-    control,
     status, statusUpdated,
     level, maxLevel
   } = data;
